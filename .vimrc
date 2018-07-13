@@ -1,7 +1,3 @@
-" Set runtime for pathogen as a submodule
-runtime bundle/pathogen/autoload/pathogen.vim
-execute pathogen#infect()
-
 " make Vim use Vim defaults, not Vi.
 set nocompatible
 
@@ -72,8 +68,8 @@ set directory=~/.vim_bkp-files/.swp//
 let mapleader = ","
 
 " Prepend all searches with the option \v which enables Perl regexps.
-"nnoremap / /\v
-"vnoremap / /\v
+nnoremap / /\v
+vnoremap / /\v
 " Highlight search matches and find them while typing.
 set hlsearch
 set incsearch
@@ -113,14 +109,6 @@ inoremap <right> <nop>
 " nnoremap k gk
 
 " Define shortcuts for invoking external programs.
-" Invoke uglifyjs on current file, mangle names on toplevel and save as
-"	*.min.js.
-" nnoremap <Leader>u :! uglifyjs % -m toplevel -o %:r.min.js<CR><Space>
-" Save the current file and invoke lessc on it, all in one step.
-" nnoremap <Leader>w :w <Bar> !lessc % > %:r.css<CR><Space>
-" Open current file in Firefox or Chrome.
-" nnoremap <Leader>ff :! firefox %<CR><Space>
-" nnoremap <Leader>gc :! google-chrome %<CR><Space>
 " Compile current LaTeX file in its own directory
 nnoremap <Leader>p :! pdflatex -output-directory %:h %<CR><Space>
 
@@ -137,52 +125,25 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
+" Define Ctrl-Space (<Nul>) as shortcut for auto complete.
+inoremap <Nul> <C-x><C-o>
+
+" FileType stuff
+filetype plugin on
+
 " Set HTML FileType for EJS and Dust templates.
 autocmd BufRead,BufNewFile *.ejs setfiletype html
 autocmd BufRead,BufNewFile *.dust setfiletype html
 
-" Set JSON FileType
-autocmd BufRead,BufNewFile *.json setfiletype json
-
-" Set Vue FileType
-" autocmd BufRead,BufNewFile *.vue setlocal filetype=vue.html.javascript.css
-
-" Set Typescript / JSX Filetype
-autocmd BufRead,BufNewFile *.jsx,*.tsx set filetype=typescript.jsx
-
 " Enable auto completion features for specific languages on file type base.
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 autocmd FileType php set omnifunc=phpcomplete#CompletePHP
-"Done by Tern
-"autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-"autocmd FileType javascript setlocal omnifunc=tern#complete
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 autocmd FileType less set omnifunc=csscomplete#CompleteCSS
 
-" Auto closing of braces
-inoremap {      {}<Left>
-inoremap {<CR>  {<CR>}<Esc>O
-inoremap {{     {
-inoremap {}     {}
-
-" Auto closing of parens
-inoremap (      ()<Left>
-inoremap (<CR>  (<CR>)<Esc>O
-inoremap ((     (
-inoremap ()     ()
-
-" Wrapping one word in parentheses
-nnoremap <Leader>( bi(<Esc>ea)<Esc>
-
 " Setting for Latex-Suite
-filetype plugin on
 set grepprg=grep\ -nH\ $*
 let g:tex_flavor='latex'
-
-" Define Ctrl-Space (<Nul>) as shortcut for auto complete.
-inoremap <Nul> <C-x><C-o>
-
-" Integrate plugin bundles.
 
 " Remap command from latex-suite so <C-j> will work again
 nnoremap <SID>Anything_maybe_change_it <Plug>IMAP_JumpForward
@@ -203,15 +164,7 @@ let g:ale_fix_on_save = 1
 " Abbreviations for Handlebars
 let g:mustache_abbreviations=1
 
-" YCM options
-let g:ycm_path_to_python_interpreter='/usr/bin/python3'
-let g:ycm_semantic_triggers = {
-	\ 'elm' : ['.'],
-	\}
-set completeopt-=preview
-
 " set colors
-"colorscheme robokai
 if has("termguicolors")
 	let &t_8f = "[38;2;%lu;%lu;%lum"
 	let &t_8b = "[48;2;%lu;%lu;%lum"
@@ -219,9 +172,6 @@ if has("termguicolors")
 endif
 colorscheme gruvbox
 set background=dark
-" Style the highlighting for the cursorline more nicely.
-"hi CursorLine cterm=NONE ctermbg=DarkGray
-
 
 " Use jsx highlighting in *.js files
 let g:jsx_ext_required = 0
@@ -237,15 +187,12 @@ nnoremap <Leader>nf :NERDTreeFind<CR>
 " NERDCommenter
 let g:NERDSpaceDelims = 1
 
-" CtrlP
-let g:ctrlp_root_markers = ['package.json']
-let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
-    \ --ignore .git
-    \ -g ""'
+" FZF
+nnoremap <C-p> :Files<CR>
 
 " Ag – The silver searcher
+" :Ag is actually part of FZF.vim
 nnoremap <Leader>a :Ag 
-"let g:ag_working_path_mode="r"
 
 " Jump to errors
 nnoremap <Leader>e :lnext<cr>
