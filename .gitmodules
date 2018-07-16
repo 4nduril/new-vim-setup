@@ -52,3 +52,6 @@
 [submodule ".vim/pack/addons/start/vim-devicons"]
 	path = .vim/pack/addons/start/vim-devicons
 	url = https://github.com/ryanoasis/vim-devicons.git
+[submodule ".vim/pack/addons/start/ack.vim"]
+	path = .vim/pack/addons/start/ack.vim
+	url = https://github.com/mileszs/ack.vim.git

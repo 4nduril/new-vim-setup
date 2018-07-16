@@ -156,7 +156,7 @@ let g:ale_sign_warning = '⚠'
 " let g:ale_lint_on_text_changed=0
 " let g:ale_lint_on_insert_leave=1
 let g:ale_linters = {
-\	'typescript': ['tslint'],
+\	'typescript': ['tslint', 'tsserver'],
 \}
 let g:ale_fixers = {
 \	'typescript': ['prettier'],
@@ -194,7 +194,8 @@ nnoremap <C-p> :Files<CR>
 
 " Ag – The silver searcher
 " :Ag is actually part of FZF.vim
-nnoremap <Leader>a :Ag 
+let g:ackprg = 'ag --vimgrep --smart-case'
+nnoremap <Leader>a :Ack!<Space>
 
 " Jump to errors
 nnoremap <Leader>e :lnext<cr>
