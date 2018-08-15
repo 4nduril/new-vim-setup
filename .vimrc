@@ -130,6 +130,7 @@ inoremap <Nul> <C-x><C-o>
 
 " FileType stuff
 filetype plugin on
+filetype indent on
 
 " Set HTML FileType for EJS and Dust templates.
 autocmd BufRead,BufNewFile *.ejs setfiletype html
@@ -158,6 +159,9 @@ let g:ale_sign_warning = '⚠'
 let g:ale_linters = {
 \	'typescript': ['tslint', 'tsserver'],
 \}
+" let g:ale_linters = {
+" \	'typescript': ['tslint'],
+" \}
 let g:ale_fixers = {
 \	'typescript': ['prettier'],
 \}
@@ -197,9 +201,21 @@ nnoremap <C-p> :Files<CR>
 let g:ackprg = 'ag --vimgrep --smart-case'
 nnoremap <Leader>a :Ack!<Space>
 
+" Use Tab for completion menu
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" Tsuquyomi
+let g:tsuquyomi_disable_default_mappings = 1
+let g:tsuquyomi_disable_quickfix = 1
+nnoremap <C-]> :TsuDefinition<cr>
+
 " Jump to errors
 nnoremap <Leader>e :lnext<cr>
 nnoremap <Leader>E :lprevious<cr>
 
 " airline options
 let g:airline_powerline_fonts = 1
+
+" Welcome
+" :echo ">^.^<"

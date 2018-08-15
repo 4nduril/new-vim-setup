@@ -46,12 +46,15 @@
 [submodule ".vim/pack/addons/start/elm-vim"]
 	path = .vim/pack/addons/start/elm-vim
 	url = https://github.com/ElmCast/elm-vim.git
-[submodule ".vim/pack/addons/start/supertab"]
-	path = .vim/pack/addons/start/supertab
-	url = https://github.com/ervandew/supertab.git
 [submodule ".vim/pack/addons/start/vim-devicons"]
 	path = .vim/pack/addons/start/vim-devicons
 	url = https://github.com/ryanoasis/vim-devicons.git
 [submodule ".vim/pack/addons/start/ack.vim"]
 	path = .vim/pack/addons/start/ack.vim
 	url = https://github.com/mileszs/ack.vim.git
+[submodule ".vim/pack/addons/start/completor-typescript"]
+	path = .vim/pack/addons/start/completor-typescript
+	url = https://github.com/maralla/completor-typescript.git
+[submodule ".vim/pack/addons/start/tsuquyomi"]
+	path = .vim/pack/addons/start/tsuquyomi
+	url = https://github.com/Quramy/tsuquyomi.git
