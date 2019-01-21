@@ -208,7 +208,8 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 " Tsuquyomi
 let g:tsuquyomi_disable_default_mappings = 1
 let g:tsuquyomi_disable_quickfix = 1
-nnoremap <C-]> :TsuDefinition<cr>
+autocmd FileType typescript nnoremap <buffer> <C-]> :TsuDefinition<cr>
+autocmd FileType typescript nnoremap <buffer> <leader>t : <C-u>echo tsuquyomi#hint()<cr>
 
 " Jump to errors
 nnoremap <Leader>e :lnext<cr>
