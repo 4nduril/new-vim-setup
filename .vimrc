@@ -163,6 +163,7 @@ let g:ale_linters = {
 " \	'typescript': ['tslint'],
 " \}
 let g:ale_fixers = {
+\	'javascript': ['eslint'],
 \	'typescript': ['prettier'],
 \}
 let g:ale_fix_on_save = 1
@@ -210,6 +211,10 @@ let g:tsuquyomi_disable_default_mappings = 1
 let g:tsuquyomi_disable_quickfix = 1
 autocmd FileType typescript nnoremap <buffer> <C-]> :TsuDefinition<cr>
 autocmd FileType typescript nnoremap <buffer> <leader>t : <C-u>echo tsuquyomi#hint()<cr>
+
+" Tern
+autocmd FileType javascript nnoremap <buffer> <C-]> :TernDef<cr>
+autocmd FileType javascript nnoremap <buffer> <leader>t :TernType<cr>
 
 " Jump to errors
 nnoremap <Leader>e :lnext<cr>

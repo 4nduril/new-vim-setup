@@ -61,3 +61,6 @@
 [submodule ".vim/pack/addons/start/vim-jsx"]
 	path = .vim/pack/addons/start/vim-jsx
 	url = https://github.com/mxw/vim-jsx.git
+[submodule ".vim/pack/addons/start/tern-for-vim"]
+	path = .vim/pack/addons/start/tern-for-vim
+	url = https://github.com/ternjs/tern_for_vim.git
