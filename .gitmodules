@@ -64,3 +64,6 @@
 [submodule ".vim/pack/addons/start/tern-for-vim"]
 	path = .vim/pack/addons/start/tern-for-vim
 	url = https://github.com/ternjs/tern_for_vim.git
+[submodule ".vim/pack/addons/start/purescript-vim"]
+	path = .vim/pack/addons/start/purescript-vim
+	url = https://github.com/purescript-contrib/purescript-vim.git
