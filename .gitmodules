@@ -58,3 +58,6 @@
 [submodule ".vim/pack/addons/start/purescript-vim"]
 	path = .vim/pack/addons/start/purescript-vim
 	url = https://github.com/purescript-contrib/purescript-vim.git
+[submodule ".vim/pack/addons/start/LanguageClient"]
+	path = .vim/pack/addons/start/LanguageClient
+	url = https://github.com/autozimu/LanguageClient-neovim.git
