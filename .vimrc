@@ -213,8 +213,8 @@ autocmd FileType typescript nnoremap <buffer> <C-]> :TsuDefinition<cr>
 autocmd FileType typescript nnoremap <buffer> <leader>t : <C-u>echo tsuquyomi#hint()<cr>
 
 " Tern
-autocmd FileType javascript nnoremap <buffer> <C-]> :TernDef<cr>
-autocmd FileType javascript nnoremap <buffer> <leader>t :TernType<cr>
+" autocmd FileType javascript nnoremap <buffer> <C-]> :TernDef<cr>
+" autocmd FileType javascript nnoremap <buffer> <leader>t :TernType<cr>
 
 " Jump to errors
 nnoremap <Leader>e :lnext<cr>

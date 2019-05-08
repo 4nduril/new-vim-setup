@@ -25,9 +25,6 @@
 [submodule ".vim/pack/addons/start/fzf.vim"]
 	path = .vim/pack/addons/start/fzf.vim
 	url = https://github.com/junegunn/fzf.vim.git
-[submodule ".vim/pack/addons/start/completor.vim"]
-	path = .vim/pack/addons/start/completor.vim
-	url = https://github.com/maralla/completor.vim.git
 [submodule ".vim/pack/addons/start/vim-javascript"]
 	path = .vim/pack/addons/start/vim-javascript
 	url = https://github.com/pangloss/vim-javascript.git
@@ -52,18 +49,12 @@
 [submodule ".vim/pack/addons/start/ack.vim"]
 	path = .vim/pack/addons/start/ack.vim
 	url = https://github.com/mileszs/ack.vim.git
-[submodule ".vim/pack/addons/start/completor-typescript"]
-	path = .vim/pack/addons/start/completor-typescript
-	url = https://github.com/maralla/completor-typescript.git
 [submodule ".vim/pack/addons/start/tsuquyomi"]
 	path = .vim/pack/addons/start/tsuquyomi
 	url = https://github.com/Quramy/tsuquyomi.git
 [submodule ".vim/pack/addons/start/vim-jsx"]
 	path = .vim/pack/addons/start/vim-jsx
 	url = https://github.com/mxw/vim-jsx.git
-[submodule ".vim/pack/addons/start/tern-for-vim"]
-	path = .vim/pack/addons/start/tern-for-vim
-	url = https://github.com/ternjs/tern_for_vim.git
 [submodule ".vim/pack/addons/start/purescript-vim"]
 	path = .vim/pack/addons/start/purescript-vim
 	url = https://github.com/purescript-contrib/purescript-vim.git
