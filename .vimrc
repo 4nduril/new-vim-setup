@@ -1,3 +1,7 @@
+"-----------"
+" INTERNALS "
+"-----------"
+
 " make Vim use Vim defaults, not Vi.
 set nocompatible
 
@@ -108,13 +112,6 @@ inoremap <right> <nop>
 " nnoremap j gj
 " nnoremap k gk
 
-" Define shortcuts for invoking external programs.
-" Compile current LaTeX file in its own directory
-nnoremap <Leader>p :! pdflatex -output-directory %:h %<CR><Space>
-
-" Define shortcuts for window splitting.
-nnoremap <Leader>v :vsplit<Space>
-nnoremap <Leader>h :split<Space>
 " Better split opening
 set splitbelow
 set splitright
@@ -125,8 +122,13 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
-" Define Ctrl-Space (<Nul>) as shortcut for auto complete.
-inoremap <Nul> <C-x><C-o>
+" Define shortcuts for window splitting.
+nnoremap <Leader>v :vsplit<Space>
+nnoremap <Leader>h :split<Space>
+
+" Define shortcuts for invoking external programs.
+" Compile current LaTeX file in its own directory
+nnoremap <Leader>p :! pdflatex -output-directory %:h %<CR><Space>
 
 " FileType stuff
 filetype plugin on
@@ -136,41 +138,6 @@ filetype indent on
 autocmd BufRead,BufNewFile *.ejs setfiletype html
 autocmd BufRead,BufNewFile *.dust setfiletype html
 
-" Enable auto completion features for specific languages on file type base.
-autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-autocmd FileType php set omnifunc=phpcomplete#CompletePHP
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-autocmd FileType less set omnifunc=csscomplete#CompleteCSS
-
-" Setting for Latex-Suite
-set grepprg=grep\ -nH\ $*
-let g:tex_flavor='latex'
-
-" Remap command from latex-suite so <C-j> will work again
-nnoremap <SID>Anything_maybe_change_it <Plug>IMAP_JumpForward
-
-" ALE options
-let g:ale_list_window_size=4
-let g:ale_open_list=1
-let g:ale_sign_error = '✘'
-let g:ale_sign_warning = '⚠'
-" let g:ale_lint_on_text_changed=0
-" let g:ale_lint_on_insert_leave=1
-let g:ale_linters = {
-\	'typescript': ['tslint', 'tsserver'],
-\}
-" let g:ale_linters = {
-" \	'typescript': ['tslint'],
-" \}
-let g:ale_fixers = {
-\	'javascript': ['eslint'],
-\	'typescript': ['prettier'],
-\}
-let g:ale_fix_on_save = 1
-
-" Abbreviations for Handlebars
-let g:mustache_abbreviations=1
-
 " set colors
 if has("termguicolors")
 	let &t_8f = "[38;2;%lu;%lu;%lum"
@@ -179,6 +146,21 @@ if has("termguicolors")
 endif
 colorscheme gruvbox
 set background=dark
+
+" Jump to errors
+nnoremap <Leader>e :lnext<cr>
+nnoremap <Leader>E :lprevious<cr>
+
+"-----------"
+" EXTERNALS "
+"-----------"
+
+" Setting for Latex-Suite
+set grepprg=grep\ -nH\ $*
+let g:tex_flavor='latex'
+
+" Remap command from latex-suite so <C-j> will work again
+nnoremap <SID>Anything_maybe_change_it <Plug>IMAP_JumpForward
 
 " Use jsx highlighting in *.js files
 let g:jsx_ext_required = 0
@@ -202,26 +184,77 @@ nnoremap <C-p> :Files<CR>
 let g:ackprg = 'ag --vimgrep --smart-case'
 nnoremap <Leader>a :Ack!<Space>
 
+" airline options
+let g:airline_powerline_fonts = 1
+
+" COMPLETION
+
+" Enable auto completion features for specific languages on file type base.
+" autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+" autocmd FileType php set omnifunc=phpcomplete#CompletePHP
+" autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+" autocmd FileType less set omnifunc=csscomplete#CompleteCSS
+
+" Define Ctrl-Space (<Nul>) as shortcut for auto complete.
+" inoremap <Nul> <C-x><C-o>
+
+" ALE options
+let g:ale_list_window_size=4
+let g:ale_open_list=1
+let g:ale_sign_error = '✘'
+let g:ale_sign_warning = '⚠'
+" let g:ale_lint_on_text_changed=0
+" let g:ale_lint_on_insert_leave=1
+" let g:ale_linters = {
+" \	'typescript': ['tslint', 'tsserver'],
+" \}
+" let g:ale_linters = {
+" \	'typescript': ['tslint'],
+" \}
+" let g:ale_fixers = {
+" \	'javascript': ['eslint'],
+" \	'typescript': ['prettier'],
+" \}
+let g:ale_fix_on_save = 1
+" let g:ale_elm_ls_use_global = 1
+
 " Use Tab for completion menu
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " Tsuquyomi
-let g:tsuquyomi_disable_default_mappings = 1
-let g:tsuquyomi_disable_quickfix = 1
-autocmd FileType typescript nnoremap <buffer> <C-]> :TsuDefinition<cr>
-autocmd FileType typescript nnoremap <buffer> <leader>t : <C-u>echo tsuquyomi#hint()<cr>
+" let g:tsuquyomi_disable_default_mappings = 1
+" let g:tsuquyomi_disable_quickfix = 1
+" autocmd FileType typescript nnoremap <buffer> <C-]> :TsuDefinition<cr>
+" autocmd FileType typescript nnoremap <buffer> <leader>t : <C-u>echo tsuquyomi#hint()<cr>
 
 " Tern
 " autocmd FileType javascript nnoremap <buffer> <C-]> :TernDef<cr>
 " autocmd FileType javascript nnoremap <buffer> <leader>t :TernType<cr>
 
-" Jump to errors
-nnoremap <Leader>e :lnext<cr>
-nnoremap <Leader>E :lprevious<cr>
+" Language settings
+" let g:LanguageClient_settingsPath = 
 
-" airline options
-let g:airline_powerline_fonts = 1
+" Language Servers
+" let g:LanguageClient_serverCommands = {
+    " \ 'javascript': ['/usr/bin/javascript-typescript-stdio'],
+    " \ 'javascript.jsx': ['/usr/bin/javascript-typescript-stdio'],
+    " \ 'typescript': ['/usr/bin/javascript-typescript-stdio'],
+    " \ 'typescript.tsx': ['/usr/bin/javascript-typescript-stdio'],
+	" \ 'reason': ['/home/tobi/Code/reason-language-server/reason-language-server.exe'],
+	" \ 'elm': ['elm-ls', '--stdio']
+    " \ }
+
+" function LC_maps()
+  " if has_key(g:LanguageClient_serverCommands, &filetype)
+	" nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+	" nnoremap <silent> <leader>t :call LanguageClient#textDocument_hover()<CR>
+	" nnoremap <buffer> <C-]> :call LanguageClient#textDocument_definition()<CR>
+	" nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+  " endif
+" endfunction
+
+" autocmd FileType * call LC_maps()
 
 " Welcome
 " :echo ">^.^<"

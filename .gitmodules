@@ -49,15 +49,12 @@
 [submodule ".vim/pack/addons/start/ack.vim"]
 	path = .vim/pack/addons/start/ack.vim
 	url = https://github.com/mileszs/ack.vim.git
-[submodule ".vim/pack/addons/start/tsuquyomi"]
-	path = .vim/pack/addons/start/tsuquyomi
-	url = https://github.com/Quramy/tsuquyomi.git
 [submodule ".vim/pack/addons/start/vim-jsx"]
 	path = .vim/pack/addons/start/vim-jsx
 	url = https://github.com/mxw/vim-jsx.git
 [submodule ".vim/pack/addons/start/purescript-vim"]
 	path = .vim/pack/addons/start/purescript-vim
 	url = https://github.com/purescript-contrib/purescript-vim.git
-[submodule ".vim/pack/addons/start/LanguageClient"]
-	path = .vim/pack/addons/start/LanguageClient
-	url = https://github.com/autozimu/LanguageClient-neovim.git
+[submodule ".vim/pack/addons/start/vim-reason-plus"]
+	path = .vim/pack/addons/start/vim-reason-plus
+	url = https://github.com/reasonml-editor/vim-reason-plus.git
