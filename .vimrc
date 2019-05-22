@@ -187,74 +187,34 @@ nnoremap <Leader>a :Ack!<Space>
 " airline options
 let g:airline_powerline_fonts = 1
 
-" COMPLETION
+" COMPLETION 
 
-" Enable auto completion features for specific languages on file type base.
-" autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-" autocmd FileType php set omnifunc=phpcomplete#CompletePHP
-" autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-" autocmd FileType less set omnifunc=csscomplete#CompleteCSS
+nmap <Leader>gd <Plug>(coc-definition)
+nmap <Leader>gt <Plug>(coc-type-definition)
+nmap <Leader>r <Plug>(coc-references)
+nmap <Leader>rn <Plug>(coc-rename)
+nmap <Leader>t :call CocAction('doHover')<cr>
 
-" Define Ctrl-Space (<Nul>) as shortcut for auto complete.
-" inoremap <Nul> <C-x><C-o>
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-" ALE options
-let g:ale_list_window_size=4
-let g:ale_open_list=1
-let g:ale_sign_error = '✘'
-let g:ale_sign_warning = '⚠'
-" let g:ale_lint_on_text_changed=0
-" let g:ale_lint_on_insert_leave=1
-" let g:ale_linters = {
-" \	'typescript': ['tslint', 'tsserver'],
-" \}
-" let g:ale_linters = {
-" \	'typescript': ['tslint'],
-" \}
-" let g:ale_fixers = {
-" \	'javascript': ['eslint'],
-" \	'typescript': ['prettier'],
-" \}
-let g:ale_fix_on_save = 1
-" let g:ale_elm_ls_use_global = 1
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
-" Use Tab for completion menu
-" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" Use <c-space> to trigger completion. Not sure if necessary
+inoremap <silent><expr> <c-space> coc#refresh()
 
-" Tsuquyomi
-" let g:tsuquyomi_disable_default_mappings = 1
-" let g:tsuquyomi_disable_quickfix = 1
-" autocmd FileType typescript nnoremap <buffer> <C-]> :TsuDefinition<cr>
-" autocmd FileType typescript nnoremap <buffer> <leader>t : <C-u>echo tsuquyomi#hint()<cr>
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
-" Tern
-" autocmd FileType javascript nnoremap <buffer> <C-]> :TernDef<cr>
-" autocmd FileType javascript nnoremap <buffer> <leader>t :TernType<cr>
-
-" Language settings
-" let g:LanguageClient_settingsPath = 
-
-" Language Servers
-" let g:LanguageClient_serverCommands = {
-    " \ 'javascript': ['/usr/bin/javascript-typescript-stdio'],
-    " \ 'javascript.jsx': ['/usr/bin/javascript-typescript-stdio'],
-    " \ 'typescript': ['/usr/bin/javascript-typescript-stdio'],
-    " \ 'typescript.tsx': ['/usr/bin/javascript-typescript-stdio'],
-	" \ 'reason': ['/home/tobi/Code/reason-language-server/reason-language-server.exe'],
-	" \ 'elm': ['elm-ls', '--stdio']
-    " \ }
-
-" function LC_maps()
-  " if has_key(g:LanguageClient_serverCommands, &filetype)
-	" nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-	" nnoremap <silent> <leader>t :call LanguageClient#textDocument_hover()<CR>
-	" nnoremap <buffer> <C-]> :call LanguageClient#textDocument_definition()<CR>
-	" nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
-  " endif
-" endfunction
-
-" autocmd FileType * call LC_maps()
 
 " Welcome
 " :echo ">^.^<"

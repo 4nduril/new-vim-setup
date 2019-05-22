@@ -58,3 +58,6 @@
 [submodule ".vim/pack/addons/start/vim-reason-plus"]
 	path = .vim/pack/addons/start/vim-reason-plus
 	url = https://github.com/reasonml-editor/vim-reason-plus.git
+[submodule ".vim/pack/addons/start/coc.nvim"]
+	path = .vim/pack/addons/start/coc.nvim
+	url = https://github.com/neoclide/coc.nvim.git

@@ -1,0 +1,16 @@
+{
+	"tsserver.npm": "/home/tobi/.nvm/versions/node/v12.1.0/bin/npm",
+	"typescript.preferences.noSemicolons": true,
+	"javascript.preferences.noSemicolons": true,
+	"coc.preferences.formatOnSaveFiletypes": ["css", "javascript", "javascriptreact", "typescript", "typescriptreact"],
+	"coc.preferences.hoverTarget": "echo",
+	"diagnostic.errorSign": "✘",
+	"diagnostic.warningSign": "⚠",
+	"diagnostic.infoSign": "ℹ",
+	"languageserver": {
+		"reason": {
+			"command": "/home/tobi/Code/reason-language-server/reason-language-server.exe",
+			"filetypes": ["reason"]
+		}
+	}
+}
