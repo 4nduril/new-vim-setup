@@ -67,6 +67,8 @@ set undodir=~/.vim_bkp-files/.undo//
 set backupdir=~/.vim_bkp-files/.backup//
 set directory=~/.vim_bkp-files/.swp//
 
+" Shorten the time that is considered as typing pause from default 4000
+set updatetime=300
 
 " Define ',' for custom mappings.
 let mapleader = ","
@@ -81,6 +83,8 @@ set incsearch
 nnoremap <Leader><space> :noh<cr>
 " Search case-agnostic.
 set ignorecase
+" Search with case when mixed input
+set smartcase
 " Always apply substitutions globally on lines.
 set gdefault
 " When you insert a bracket, shortly show matching one.
@@ -177,7 +181,7 @@ nnoremap <Leader>nf :NERDTreeFind<CR>
 let g:NERDSpaceDelims = 1
 
 " FZF
-nnoremap <C-p> :Files<CR>
+nnoremap <C-p> :GitFiles<CR>
 
 " Ag – The silver searcher
 " :Ag is actually part of FZF.vim
@@ -189,11 +193,12 @@ let g:airline_powerline_fonts = 1
 
 " COMPLETION 
 
-nmap <Leader>gd <Plug>(coc-definition)
-nmap <Leader>gt <Plug>(coc-type-definition)
-nmap <Leader>r <Plug>(coc-references)
-nmap <Leader>rn <Plug>(coc-rename)
-nmap <Leader>t :call CocAction('doHover')<cr>
+nmap <silent><Leader>gd <Plug>(coc-definition)
+nmap <silent><Leader>gt <Plug>(coc-type-definition)
+nmap <silent><Leader>r <Plug>(coc-references)
+nmap <silent><Leader>rn <Plug>(coc-rename)
+nmap <silent><Leader>t :call CocAction('doHover')<cr>
+nmap <silent><Leader>do <Plug>(coc-codeaction)
 
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
@@ -209,7 +214,7 @@ function! s:check_back_space() abort
 endfunction
 
 " Use <c-space> to trigger completion. Not sure if necessary
-inoremap <silent><expr> <c-space> coc#refresh()
+inoremap <silent><expr> <c-@> coc#refresh()
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
 " Coc only does snippet and additional edit on confirm.

@@ -1,6 +1,3 @@
-[submodule ".vim/pack/addons/start/ale"]
-	path = .vim/pack/addons/start/ale
-	url = https://github.com/w0rp/ale.git
 [submodule ".vim/pack/addons/start/editorconfig"]
 	path = .vim/pack/addons/start/editorconfig
 	url = https://github.com/editorconfig/editorconfig-vim.git
@@ -61,3 +58,6 @@
 [submodule ".vim/pack/addons/start/coc.nvim"]
 	path = .vim/pack/addons/start/coc.nvim
 	url = https://github.com/neoclide/coc.nvim.git
+[submodule ".vim/pack/addons/start/vim-graphql"]
+	path = .vim/pack/addons/start/vim-graphql
+	url = https://github.com/jparise/vim-graphql.git

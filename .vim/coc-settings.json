@@ -1,16 +1,55 @@
 {
-	"tsserver.npm": "/home/tobi/.nvm/versions/node/v12.1.0/bin/npm",
-	"typescript.preferences.noSemicolons": true,
-	"javascript.preferences.noSemicolons": true,
-	"coc.preferences.formatOnSaveFiletypes": ["css", "javascript", "javascriptreact", "typescript", "typescriptreact"],
-	"coc.preferences.hoverTarget": "echo",
-	"diagnostic.errorSign": "✘",
-	"diagnostic.warningSign": "⚠",
-	"diagnostic.infoSign": "ℹ",
-	"languageserver": {
-		"reason": {
-			"command": "/home/tobi/Code/reason-language-server/reason-language-server.exe",
-			"filetypes": ["reason"]
-		}
-	}
+  "eslint.validate": ["graphql"],
+  "tsserver.npm": "/home/tobi/.nvm/versions/node/v14.16.0/bin/npm",
+  "tsserver.log": "verbose",
+  "coc.preferences.formatOnSaveFiletypes": [
+    "css",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "elm",
+    "json",
+    "graphql"
+  ],
+  "coc.preferences.hoverTarget": "echo",
+  "diagnostic.errorSign": "✘",
+  "diagnostic.warningSign": "⚠",
+  "diagnostic.infoSign": "ℹ",
+  "languageserver": {
+    "graphql": {
+      "command": "graphql-lsp",
+      "args": ["server", "-m", "stream"],
+      "filetypes": ["typescript", "typescriptreact", "graphql"]
+    },
+    "reason": {
+      "command": "/home/tobi/Code/reason-language-server/reason-language-server.exe",
+      "filetypes": ["reason"]
+    },
+    "elmLS": {
+      "command": "elm-language-server",
+      "args": ["--stdio"],
+      "filetypes": ["elm"],
+      "rootPatterns": ["elm.json"],
+      "initializationOptions": {
+        "runtime": "node",
+        "elmPath": "elm",
+        "elmFormatPath": "elm-format",
+        "elmTestPath": "elm-test"
+      }
+    },
+    "haskell": {
+      "command": "haskell-language-server-wrapper",
+      "args": ["--lsp"],
+      "rootPatterns": [
+        ".stack.yaml",
+        ".hie-bios",
+        "BUILD.bazel",
+        "cabal.config",
+        "package.yaml"
+      ],
+      "filetypes": ["hs", "lhs", "haskell"]
+    }
+  },
+  "coc.preferences.extensionUpdateCheck": "daily"
 }
