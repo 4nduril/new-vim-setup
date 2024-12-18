@@ -61,3 +61,6 @@
 [submodule ".vim/pack/addons/start/vim-graphql"]
 	path = .vim/pack/addons/start/vim-graphql
 	url = https://github.com/jparise/vim-graphql.git
+[submodule ".vim/pack/addons/start/vim-prisma"]
+	path = .vim/pack/addons/start/vim-prisma
+	url = https://github.com/prisma/vim-prisma.git

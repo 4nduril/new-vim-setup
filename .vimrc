@@ -191,9 +191,17 @@ nnoremap <Leader>a :Ack!<Space>
 " airline options
 let g:airline_powerline_fonts = 1
 
+" Copilot
+" we need to use another key for accepting the suggestion because otherwise 
+" coc menu tabbing is broken. Also for whatever reason this has to stand 
+" before Coc tab completion definition.
+imap <silent><script><expr> <C-i> copilot#Accept("\<CR>")
+let g:copilot_no_tab_map = v:true
+
 " COMPLETION 
 
 nmap <silent><Leader>gd <Plug>(coc-definition)
+nmap <silent><Leader>gv :call CocAction('jumpDefinition', 'vsplit')<CR>
 nmap <silent><Leader>gt <Plug>(coc-type-definition)
 nmap <silent><Leader>r <Plug>(coc-references)
 nmap <silent><Leader>rn <Plug>(coc-rename)
@@ -203,23 +211,29 @@ nmap <silent><Leader>do <Plug>(coc-codeaction)
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<TAB>" :
       \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
-function! s:check_back_space() abort
+function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
 " Use <c-space> to trigger completion. Not sure if necessary
-inoremap <silent><expr> <c-@> coc#refresh()
+" Note that some terminal emulators treat the combination of CTRL and SPACE as
+" <C-@>. Kitty does it correctly though but in other terminals you may need to
+" change that.
+inoremap <silent><expr> <C-Space> coc#refresh()
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
 " Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<C-r>=coc#on_enter()\<CR>"
 
+" Ultisnips
+
+let	g:UltiSnipsExpandTrigger="<c-s>"
 
 " Welcome
 " :echo ">^.^<"

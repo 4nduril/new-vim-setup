@@ -1,7 +1,6 @@
 {
-  "eslint.validate": ["graphql"],
-  "tsserver.npm": "/home/tobi/.nvm/versions/node/v14.16.0/bin/npm",
   "tsserver.log": "verbose",
+  "tsserver.useLocalTsdk": true,
   "coc.preferences.formatOnSaveFiletypes": [
     "css",
     "javascript",
