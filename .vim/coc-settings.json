@@ -7,35 +7,19 @@
     "javascriptreact",
     "typescript",
     "typescriptreact",
-    "elm",
     "json",
     "graphql"
   ],
   "coc.preferences.hoverTarget": "echo",
   "diagnostic.errorSign": "✘",
   "diagnostic.warningSign": "⚠",
+  "diagnostic.hintSign": "⚠",
   "diagnostic.infoSign": "ℹ",
   "languageserver": {
     "graphql": {
       "command": "graphql-lsp",
       "args": ["server", "-m", "stream"],
       "filetypes": ["typescript", "typescriptreact", "graphql"]
-    },
-    "reason": {
-      "command": "/home/tobi/Code/reason-language-server/reason-language-server.exe",
-      "filetypes": ["reason"]
-    },
-    "elmLS": {
-      "command": "elm-language-server",
-      "args": ["--stdio"],
-      "filetypes": ["elm"],
-      "rootPatterns": ["elm.json"],
-      "initializationOptions": {
-        "runtime": "node",
-        "elmPath": "elm",
-        "elmFormatPath": "elm-format",
-        "elmTestPath": "elm-test"
-      }
     },
     "haskell": {
       "command": "haskell-language-server-wrapper",
