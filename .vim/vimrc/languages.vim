@@ -1,3 +1,3 @@
 " Language-related global behavior.
 
-set spelllang=de
+let &spelllang = get(g:, 'newvim_spelllang', 'en')

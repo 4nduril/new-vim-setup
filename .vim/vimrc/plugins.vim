@@ -1,7 +1,7 @@
 " Plugin integration and plugin-specific mappings.
 
 let g:NERDSpaceDelims = 1
-let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = get(g:, 'newvim_airline_powerline_fonts', 0)
 let g:copilot_no_tab_map = v:true
 let g:tex_flavor = 'latex'
 

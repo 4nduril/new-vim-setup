@@ -197,11 +197,12 @@ It loads automatically when opening a LaTeX file such as `*.tex`.
 
 ## Local Config
 
-The supported local override mechanism is:
+Supported local override files:
 
-- `~/.vim/local.vim`
+- repo-local: `.vim/local.vim`
+- home-local: `~/.vim/local.vim`
 
-The main config sources that file only if it exists.
+Both are optional. If both exist, the repo-local file is sourced first and the home-local file is sourced second.
 
 Use it for:
 
@@ -216,7 +217,31 @@ Do not use it for:
 - shared plugin definitions
 - anything needed for normal bootstrap
 
-If you prefer to keep local config near the repo, the cleanest approach is usually to keep the supported file outside the repo and symlink or generate it yourself. The tracked setup itself only assumes `~/.vim/local.vim`.
+`.vim/local.vim` is ignored by git, so it can be used safely for repo-local overrides.
+
+### Local Config Examples
+
+You can use the local config to override a few portability-sensitive defaults before the main config is applied:
+
+```vim
+let g:newvim_state_root = '~/.vim_bkp-files'
+let g:newvim_spelllang = 'de'
+let g:newvim_airline_powerline_fonts = 1
+```
+
+`g:newvim_state_root` controls where persistent Vim state is stored. By default the tracked config uses:
+
+```vim
+~/.local/state/vim
+```
+
+and creates:
+
+- `~/.local/state/vim/.undo`
+- `~/.local/state/vim/.backup`
+- `~/.local/state/vim/.swp`
+
+If you want a different location on another machine, set `g:newvim_state_root` in one of the local config files instead of editing tracked config.
 
 ## Plugin Notes
 

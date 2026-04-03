@@ -26,7 +26,7 @@ set mouse=a
 set splitbelow
 set splitright
 
-let s:state_root = expand('~/.vim_bkp-files')
+let s:state_root = expand(get(g:, 'newvim_state_root', '~/.local/state/vim'))
 let s:undo_dir = s:state_root . '/.undo'
 let s:backup_dir = s:state_root . '/.backup'
 let s:swap_dir = s:state_root . '/.swp'
