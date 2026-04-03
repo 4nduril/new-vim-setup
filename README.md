@@ -112,6 +112,16 @@ Possible causes:
 - local changes were made inside the plugin
 - a plugin-specific install/build step modified tracked files
 
+If a plugin-specific setup step modified tracked files inside the submodule,
+future upgrades may be blocked until those local changes are cleaned or stashed.
+In that case:
+
+1. inspect the plugin with `git status`
+2. reset or stash local plugin changes you do not intend to keep
+3. upgrade the plugin to the new commit
+4. re-run the local setup step if needed
+5. commit only the parent repo's submodule pointer unless you intentionally want a forked plugin state
+
 ### Add a New Plugin
 
 Example for an always-on plugin:
