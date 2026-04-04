@@ -328,6 +328,7 @@ Do not commit:
 | `vim-graphql` | `start` | GraphQL syntax/filetype support | web workflow |
 | `vim-prisma` | `start` | Prisma syntax/filetype support | web workflow |
 | `vim-rzip` | `start` | zip editing helper | retained |
+| `vim-fugitive` | `start` | Git integration | core versioning workflow |
 | `copilot.vim` | `opt` | AI completion | load with `:CopilotEnable` |
 | `vim-latex` | `opt` | LaTeX support | loads for LaTeX files |
 
