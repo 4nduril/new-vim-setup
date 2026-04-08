@@ -6,6 +6,11 @@ set list
 set listchars=tab:\.\ ,eol:¬
 set ruler
 set laststatus=2
+set shortmess+=F
+
+" Avoid Kitty/xterm termresponse glitches that leave the lower screen area
+" unpainted until the first real keypress.
+set t_RV=
 set relativenumber
 set background=dark
 
@@ -16,8 +21,3 @@ if has('termguicolors')
 endif
 
 colorscheme gruvbox
-
-augroup NewVimUiRedraw
-  autocmd!
-  autocmd VimEnter * redraw!
-augroup END
