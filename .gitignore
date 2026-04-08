@@ -1,2 +1,5 @@
-.vim/view
-.vim/local.vim
+config/vim/.vim/view
+config/vim/.vim/local.vim
+
+# Local/private overrides
+*.local

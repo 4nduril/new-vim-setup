@@ -1,0 +1,11 @@
+[core]
+	editor = vim
+	autocrlf = false
+[merge]
+	tool = vimdiff
+[push]
+	default = simple
+[init]
+	defaultBranch = main
+[include]
+	path = ~/.gitconfig.local

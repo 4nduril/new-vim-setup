@@ -1,355 +1,198 @@
-# newVim
+# dev-machine-setup
 
-Personal Vim setup built around native Vim packages and git submodules.
+Personal Linux development machine setup.
 
-This repo intentionally uses:
+This repo manages:
 
-- native Vim packages under `.vim/pack/plugins/{start,opt}`
-- git submodules for pinned plugin versions
-- `packadd` for optional plugins
+- Vim
+- Zsh
+- minimal Bash compatibility
+- Kitty
+- Git defaults
+- EditorConfig, ESLint, and TypeScript home defaults
+- project-copyable templates
+- the Literation Mono Nerd Font used for terminal/editor icons
+- a Bash setup script for symlinking configs and bootstrapping user-space tools
 
-It does not use a separate plugin manager.
+The setup targets Arch-derived systems, including Manjaro, and Ubuntu.
 
-## Bootstrap
+## Safety Model
 
-Clone the repo and initialize plugins:
+This repo is intended to be public-safe.
 
-```bash
-git clone <repo-url> newVim
-cd newVim
-git submodule update --init --recursive
-```
+Tracked files must not contain real names, email addresses, tokens, or private
+machine-specific values. Private overrides live in local files such as:
 
-That gives you the plugin directories tracked by `.gitmodules`.
+- `~/.zshrc.local`
+- `~/.zshenv.local`
+- `~/.bashrc.local`
+- `~/.gitconfig.local`
+- `~/.config/kitty/local.conf`
+- `~/.vim/local.vim`
+
+The setup script can create `~/.gitconfig.local` interactively. It can also
+update `~/.npmrc` after asking first, because npm does not provide the same
+clean include mechanism as Git.
 
 ## Requirements
 
-Base requirements:
+Install system packages manually before running setup. The script prints the
+current package list for the detected distro and stops if required tools are
+missing.
 
-- Vim 9.x
-- Node.js for `coc.nvim`
-- `fzf` binary on `PATH`
-- `ripgrep` (`rg`) on `PATH` for content search via FZF
+Arch / Manjaro:
 
-Optional requirements:
+```bash
+sudo pacman -S --needed git bash vim zsh kitty ripgrep fzf bat lsd zoxide fontconfig openssh procps-ng curl ca-certificates zsh-autosuggestions nvm
+```
 
-- `pdflatex` for LaTeX compilation from Vim
-- GitHub Copilot access/subscription for `copilot.vim`
-- a Nerd Font or another icon-capable font if you want `vim-devicons` to render correctly
+Ubuntu:
+
+```bash
+sudo apt update
+sudo apt install git bash vim zsh kitty ripgrep fzf bat lsd zoxide fontconfig openssh-client procps curl ca-certificates zsh-autosuggestions
+```
+
+Install `nvm` separately on Ubuntu before rerunning setup. On some Ubuntu
+releases, the `bat` package exposes `batcat`; the shell config handles either
+command.
+
+## Setup
+
+```bash
+git clone <repo-url> dev-machine-setup
+cd dev-machine-setup
+./scripts/setup
+```
+
+The setup script:
+
+1. checks required tools
+2. initializes Vim plugin submodules
+3. installs the Nerd Font into `~/.local/share/fonts/dev-machine-setup`
+4. refreshes the font cache
+5. symlinks managed configs
+6. prompts for Git identity in `~/.gitconfig.local`
+7. optionally prompts for npm author defaults in `~/.npmrc`
+8. installs the latest Node via `nvm install node`
+9. installs global npm packages
+10. changes the default shell to Zsh
+
+The script is intended to be rerunnable. Existing config files are not
+overwritten silently.
 
 ## Layout
 
-Managed plugins live in:
+```text
+assets/
+  fonts/
+config/
+  bash/
+  editorconfig/
+  eslint/
+  git/
+  kitty/
+  typescript/
+  vim/
+  zsh/
+scripts/
+templates/
+```
 
-- `.vim/pack/plugins/start`
-- `.vim/pack/plugins/opt`
+Deployable configs live under `config/`. Project-copyable defaults live under
+`templates/`.
 
-Current optional plugins:
+## Templates
+
+Copy files from `templates/` into projects when useful:
+
+- `templates/editorconfig/.editorconfig`
+- `templates/eslint/eslint.config.mts`
+- `templates/prettier/.prettierrc.json`
+- `templates/typescript/tsconfig.json`
+- `templates/vitest/vitest.config.ts`
+
+The EditorConfig, ESLint, and TypeScript defaults are also deployed to `$HOME`.
+Prettier and Vitest are templates only.
+
+## Vim
+
+The Vim setup uses native Vim packages and git submodules. It does not use a
+separate plugin manager.
+
+Managed Vim files live under:
+
+```text
+config/vim/.vimrc
+config/vim/.vim/
+```
+
+Plugins live under:
+
+```text
+config/vim/.vim/pack/plugins/start
+config/vim/.vim/pack/plugins/opt
+```
+
+Initialize plugins:
+
+```bash
+git submodule update --init --recursive
+```
+
+Optional plugins:
 
 - `copilot.vim`
 - `vim-latex`
 
-Everything else that is kept loads from `start/`.
+`copilot.vim` is loaded explicitly from Vim with:
 
-## Common Workflows
-
-### Fresh Checkout on Another Machine
-
-```bash
-git submodule update --init --recursive
+```vim
+:CopilotEnable
 ```
 
-Then make sure the external tools from the requirements section are installed.
+After first load on a machine, run:
 
-### Upgrade an Existing Plugin
+```vim
+:Copilot setup
+```
+
+`vim-latex` loads automatically for LaTeX files.
+
+Local Vim overrides belong in:
+
+```text
+~/.vim/local.vim
+```
+
+## Updating Vim Plugins
 
 Example for a `start/` plugin:
 
 ```bash
-cd .vim/pack/plugins/start/<plugin-name>
+cd config/vim/.vim/pack/plugins/start/<plugin-name>
 git fetch origin
 git checkout <tag-or-commit>
-cd /home/tobi/Code/newVim
-git add .vim/pack/plugins/start/<plugin-name>
+cd /path/to/dev-machine-setup
+git add config/vim/.vim/pack/plugins/start/<plugin-name>
 git commit -m "Update <plugin-name>"
 ```
 
 Example for an `opt/` plugin:
 
 ```bash
-cd .vim/pack/plugins/opt/<plugin-name>
+cd config/vim/.vim/pack/plugins/opt/<plugin-name>
 git fetch origin
 git checkout <tag-or-commit>
-cd /home/tobi/Code/newVim
-git add .vim/pack/plugins/opt/<plugin-name>
+cd /path/to/dev-machine-setup
+git add config/vim/.vim/pack/plugins/opt/<plugin-name>
 git commit -m "Update <plugin-name>"
 ```
 
-If the upgrade also changes `.gitmodules`, stage that too:
+If `.gitmodules` changed, stage it too:
 
 ```bash
 git add .gitmodules
 ```
 
-Important:
-
-- the superproject commit stores the submodule pointer
-- do not commit incidental local files created inside a plugin unless you intentionally mean to maintain a fork
-
-### Inspect a Dirty Plugin Submodule
-
-If root `git status` shows a plugin as modified, inspect the plugin directly:
-
-```bash
-cd .vim/pack/plugins/start/<plugin-name>
-git status
-git log --oneline --decorate -n 5
-```
-
-Possible causes:
-
-- the submodule is checked out to a different commit
-- local changes were made inside the plugin
-- a plugin-specific install/build step modified tracked files
-
-If a plugin-specific setup step modified tracked files inside the submodule,
-future upgrades may be blocked until those local changes are cleaned or stashed.
-In that case:
-
-1. inspect the plugin with `git status`
-2. reset or stash local plugin changes you do not intend to keep
-3. upgrade the plugin to the new commit
-4. re-run the local setup step if needed
-5. commit only the parent repo's submodule pointer unless you intentionally want a forked plugin state
-
-### Add a New Plugin
-
-Example for an always-on plugin:
-
-```bash
-git submodule add <plugin-url> .vim/pack/plugins/start/<plugin-name>
-git commit -m "Add <plugin-name>"
-```
-
-Example for an optional plugin:
-
-```bash
-git submodule add <plugin-url> .vim/pack/plugins/opt/<plugin-name>
-git commit -m "Add <plugin-name>"
-```
-
-Then document:
-
-- why the plugin is kept
-- whether it belongs in `start/` or `opt/`
-- any external dependency, auth step, or post-install step
-
-### Remove a Plugin
-
-Removal should be deliberate and done in one cleanup change:
-
-1. remove the config that depends on the plugin
-2. remove the submodule entry from the index
-3. remove the plugin path from `.gitmodules` if Git does not do it for you
-4. commit the cleanup together
-
-Typical flow for a tracked plugin:
-
-```bash
-git rm -f .vim/pack/plugins/start/<plugin-name>
-git commit -m "Remove <plugin-name>"
-```
-
-If the plugin lives in `opt/`, remove it from that path instead.
-
-Do not leave dead config behind after plugin removal.
-
-## Optional Plugin Loading
-
-This repo uses Vim-native `packadd` for optional plugins.
-
-### Copilot
-
-`copilot.vim` lives in `opt/` and does not load at startup.
-
-Enable it explicitly from inside Vim:
-
-```vim
-:CopilotEnable
-```
-
-That command:
-
-- runs `packadd copilot.vim`
-- applies the Copilot-specific mapping
-
-After the plugin is loaded for the first time on a machine, run:
-
-```vim
-:Copilot setup
-```
-
-### LaTeX
-
-`vim-latex` lives in `opt/`.
-
-It loads automatically when opening a LaTeX file such as `*.tex`.
-
-## Local Config
-
-Supported local override files:
-
-- repo-local: `.vim/local.vim`
-- home-local: `~/.vim/local.vim`
-
-Both are optional. If both exist, the repo-local file is sourced first and the home-local file is sourced second.
-
-Use it for:
-
-- machine-specific executable paths
-- local visual/font tweaks
-- personal mappings
-- temporary experiments you do not want tracked
-
-Do not use it for:
-
-- required base behavior
-- shared plugin definitions
-- anything needed for normal bootstrap
-
-`.vim/local.vim` is ignored by git, so it can be used safely for repo-local overrides.
-
-### Local Config Examples
-
-You can use the local config to override a few portability-sensitive defaults before the main config is applied:
-
-```vim
-let g:newvim_state_root = '~/.vim_bkp-files'
-let g:newvim_spelllang = 'de'
-let g:newvim_airline_powerline_fonts = 1
-```
-
-`g:newvim_state_root` controls where persistent Vim state is stored. By default the tracked config uses:
-
-```vim
-~/.local/state/vim
-```
-
-and creates:
-
-- `~/.local/state/vim/.undo`
-- `~/.local/state/vim/.backup`
-- `~/.local/state/vim/.swp`
-
-If you want a different location on another machine, set `g:newvim_state_root` in one of the local config files instead of editing tracked config.
-
-## Plugin Notes
-
-### coc.nvim
-
-Requirements:
-
-- Node.js installed locally
-
-Notes:
-
-- this repo tracks the plugin as a pinned submodule
-- after upgrading it, verify that Vim still starts cleanly and completion still works
-
-### fzf.vim
-
-Important:
-
-- `fzf.vim` is only the Vim integration layer
-- it depends on the external `fzf` binary
-- content search is expected to use `ripgrep` through `:Rg`
-
-If `:Files`, `:GFiles`, or `:Rg` fail, check your external tool installation first.
-
-### copilot.vim
-
-Requirements:
-
-- Node.js installed locally
-- GitHub Copilot access/subscription
-
-Notes:
-
-- this repo keeps it as an optional plugin in `opt/`
-- load it with `:CopilotEnable`
-- do not commit local auth state
-
-### vim-latex
-
-Requirements:
-
-- LaTeX tooling such as `pdflatex`
-
-Notes:
-
-- the plugin loads on demand for LaTeX files
-- `<Leader>p` compiles the current LaTeX file in its own directory
-
-### vim-devicons
-
-Requirements:
-
-- a compatible icon-capable font, typically a Nerd Font
-
-Notes:
-
-- without the expected font support, icon rendering may be broken or degraded
-
-## What Not To Commit
-
-Do not commit:
-
-- local auth state
-- machine-specific generated caches
-- incidental edits inside plugin submodules unless you intentionally mean to fork or patch that plugin
-
-## Plugin Inventory
-
-### Retained Plugins
-
-| Plugin | Mode | Purpose | Notes |
-| --- | --- | --- | --- |
-| `coc.nvim` | `start` | LSP, completion, diagnostics | Requires Node.js |
-| `gruvbox` | `start` | colorscheme | core UI choice |
-| `editorconfig` | `start` | EditorConfig support | project formatting defaults |
-| `vim-surround` | `start` | surround editing helpers | core editing workflow |
-| `fzf.vim` | `start` | file and content search UI | requires `fzf` and `rg` |
-| `nerdtree` | `start` | file tree | core navigation workflow |
-| `nerdcommenter` | `start` | commenting helpers | active workflow |
-| `auto-pairs` | `start` | pairing helpers | retained as useful |
-| `vim-airline` | `start` | statusline | retained as useful |
-| `vim-devicons` | `start` | file icons | depends on font support |
-| `vim-css3-syntax` | `start` | CSS syntax improvements | retained |
-| `vim-graphql` | `start` | GraphQL syntax/filetype support | web workflow |
-| `vim-prisma` | `start` | Prisma syntax/filetype support | web workflow |
-| `vim-rzip` | `start` | zip editing helper | retained |
-| `vim-fugitive` | `start` | Git integration | core versioning workflow |
-| `copilot.vim` | `opt` | AI completion | load with `:CopilotEnable` |
-| `vim-latex` | `opt` | LaTeX support | loads for LaTeX files |
-
-### Removed Plugins
-
-Removed during cleanup:
-
-- `ack.vim`
-- `ultisnips`
-- `vim-snippets`
-- `typescript-vim`
-- `vim-javascript`
-- `vim-jsx`
-- `vim-jsx-typescript`
-- `elm-vim`
-- `purescript-vim`
-- `vim-reason-plus`
-
-Reasons:
-
-- replaced by a cleaner search workflow
-- not part of the real editing workflow
-- redundant with built-in Vim support
-- no longer relevant enough to keep installed
+The parent repo commit stores the submodule pointer.

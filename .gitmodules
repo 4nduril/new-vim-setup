@@ -1,52 +1,52 @@
-[submodule ".vim/pack/plugins/start/auto-pairs"]
-	path = .vim/pack/plugins/start/auto-pairs
+[submodule "config/vim/.vim/pack/plugins/start/auto-pairs"]
+	path = config/vim/.vim/pack/plugins/start/auto-pairs
 	url = https://github.com/jiangmiao/auto-pairs.git
-[submodule ".vim/pack/plugins/start/coc.nvim"]
-	path = .vim/pack/plugins/start/coc.nvim
+[submodule "config/vim/.vim/pack/plugins/start/coc.nvim"]
+	path = config/vim/.vim/pack/plugins/start/coc.nvim
 	url = https://github.com/neoclide/coc.nvim.git
 	branch = release
-[submodule ".vim/pack/plugins/start/editorconfig"]
-	path = .vim/pack/plugins/start/editorconfig
+[submodule "config/vim/.vim/pack/plugins/start/editorconfig"]
+	path = config/vim/.vim/pack/plugins/start/editorconfig
 	url = https://github.com/editorconfig/editorconfig-vim.git
-[submodule ".vim/pack/plugins/start/fzf.vim"]
-	path = .vim/pack/plugins/start/fzf.vim
+[submodule "config/vim/.vim/pack/plugins/start/fzf.vim"]
+	path = config/vim/.vim/pack/plugins/start/fzf.vim
 	url = https://github.com/junegunn/fzf.vim.git
-[submodule ".vim/pack/plugins/start/gruvbox"]
-	path = .vim/pack/plugins/start/gruvbox
+[submodule "config/vim/.vim/pack/plugins/start/gruvbox"]
+	path = config/vim/.vim/pack/plugins/start/gruvbox
 	url = https://github.com/morhetz/gruvbox.git
-[submodule ".vim/pack/plugins/start/nerdcommenter"]
-	path = .vim/pack/plugins/start/nerdcommenter
+[submodule "config/vim/.vim/pack/plugins/start/nerdcommenter"]
+	path = config/vim/.vim/pack/plugins/start/nerdcommenter
 	url = https://github.com/scrooloose/nerdcommenter.git
-[submodule ".vim/pack/plugins/start/nerdtree"]
-	path = .vim/pack/plugins/start/nerdtree
+[submodule "config/vim/.vim/pack/plugins/start/nerdtree"]
+	path = config/vim/.vim/pack/plugins/start/nerdtree
 	url = https://github.com/scrooloose/nerdtree.git
-[submodule ".vim/pack/plugins/start/vim-airline"]
-	path = .vim/pack/plugins/start/vim-airline
+[submodule "config/vim/.vim/pack/plugins/start/vim-airline"]
+	path = config/vim/.vim/pack/plugins/start/vim-airline
 	url = https://github.com/vim-airline/vim-airline.git
-[submodule ".vim/pack/plugins/start/vim-css3-syntax"]
-	path = .vim/pack/plugins/start/vim-css3-syntax
+[submodule "config/vim/.vim/pack/plugins/start/vim-css3-syntax"]
+	path = config/vim/.vim/pack/plugins/start/vim-css3-syntax
 	url = https://github.com/hail2u/vim-css3-syntax.git
-[submodule ".vim/pack/plugins/start/vim-devicons"]
-	path = .vim/pack/plugins/start/vim-devicons
+[submodule "config/vim/.vim/pack/plugins/start/vim-devicons"]
+	path = config/vim/.vim/pack/plugins/start/vim-devicons
 	url = https://github.com/ryanoasis/vim-devicons.git
-[submodule ".vim/pack/plugins/start/vim-graphql"]
-	path = .vim/pack/plugins/start/vim-graphql
+[submodule "config/vim/.vim/pack/plugins/start/vim-graphql"]
+	path = config/vim/.vim/pack/plugins/start/vim-graphql
 	url = https://github.com/jparise/vim-graphql.git
-[submodule ".vim/pack/plugins/start/vim-prisma"]
-	path = .vim/pack/plugins/start/vim-prisma
+[submodule "config/vim/.vim/pack/plugins/start/vim-prisma"]
+	path = config/vim/.vim/pack/plugins/start/vim-prisma
 	url = https://github.com/prisma/vim-prisma.git
-[submodule ".vim/pack/plugins/start/vim-rzip"]
-	path = .vim/pack/plugins/start/vim-rzip
+[submodule "config/vim/.vim/pack/plugins/start/vim-rzip"]
+	path = config/vim/.vim/pack/plugins/start/vim-rzip
 	url = https://github.com/lbrayner/vim-rzip
-[submodule ".vim/pack/plugins/start/vim-surround"]
-	path = .vim/pack/plugins/start/vim-surround
+[submodule "config/vim/.vim/pack/plugins/start/vim-surround"]
+	path = config/vim/.vim/pack/plugins/start/vim-surround
 	url = https://github.com/tpope/vim-surround.git
-[submodule ".vim/pack/plugins/opt/vim-latex"]
-	path = .vim/pack/plugins/opt/vim-latex
+[submodule "config/vim/.vim/pack/plugins/opt/vim-latex"]
+	path = config/vim/.vim/pack/plugins/opt/vim-latex
 	url = https://github.com/vim-latex/vim-latex.git
-[submodule ".vim/pack/plugins/opt/copilot.vim"]
-	path = .vim/pack/plugins/opt/copilot.vim
+[submodule "config/vim/.vim/pack/plugins/opt/copilot.vim"]
+	path = config/vim/.vim/pack/plugins/opt/copilot.vim
 	url = https://github.com/github/copilot.vim
-[submodule ".vim/pack/plugins/start/fugitive"]
-	path = .vim/pack/plugins/start/fugitive
+[submodule "config/vim/.vim/pack/plugins/start/fugitive"]
+	path = config/vim/.vim/pack/plugins/start/fugitive
 	url = https://github.com/tpope/vim-fugitive.git

@@ -16,3 +16,8 @@ if has('termguicolors')
 endif
 
 colorscheme gruvbox
+
+augroup NewVimUiRedraw
+  autocmd!
+  autocmd VimEnter * redraw!
+augroup END

@@ -1,0 +1,394 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+repo_root="$(cd -- "$script_dir/.." && pwd -P)"
+timestamp="$(date +%Y%m%d%H%M%S)"
+
+log() {
+  printf '%s\n' "$*"
+}
+
+warn() {
+  printf 'warning: %s\n' "$*" >&2
+}
+
+die() {
+  printf 'error: %s\n' "$*" >&2
+  exit 1
+}
+
+is_interactive() {
+  [[ -t 0 && -t 1 ]]
+}
+
+confirm() {
+  local prompt="$1"
+  local answer
+
+  if ! is_interactive; then
+    return 1
+  fi
+
+  printf '%s [y/N] ' "$prompt"
+  read -r answer
+  [[ "$answer" == "y" || "$answer" == "Y" || "$answer" == "yes" || "$answer" == "YES" ]]
+}
+
+detect_os_family() {
+  local id=""
+  local id_like=""
+
+  if [[ -r /etc/os-release ]]; then
+    # shellcheck disable=SC1091
+    source /etc/os-release
+    id="${ID:-}"
+    id_like="${ID_LIKE:-}"
+  fi
+
+  case " $id $id_like " in
+    *" arch "*|*" manjaro "*) printf 'arch' ;;
+    *" ubuntu "*|*" debian "*) printf 'ubuntu' ;;
+    *) printf 'unknown' ;;
+  esac
+}
+
+print_package_instructions() {
+  local os_family="$1"
+
+  log "Required system packages:"
+  case "$os_family" in
+    arch)
+      log "  sudo pacman -S --needed git bash vim zsh kitty ripgrep fzf bat lsd zoxide fontconfig openssh procps-ng curl ca-certificates zsh-autosuggestions nvm"
+      ;;
+    ubuntu)
+      log "  sudo apt update"
+      log "  sudo apt install git bash vim zsh kitty ripgrep fzf bat lsd zoxide fontconfig openssh-client procps curl ca-certificates zsh-autosuggestions"
+      log "  Install nvm separately before rerunning setup."
+      log "  On some Ubuntu releases, the bat package provides the command as batcat; the shell config handles that."
+      ;;
+    *)
+      log "  Unsupported distro family. Install equivalent packages for:"
+      log "  git bash vim zsh kitty ripgrep fzf bat lsd zoxide fontconfig openssh/procps curl ca-certificates zsh-autosuggestions nvm"
+      ;;
+  esac
+}
+
+has_zsh_autosuggestions() {
+  [[ -r /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ||
+     -r /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]
+}
+
+find_nvm_source() {
+  local candidate
+  for candidate in \
+    /usr/share/nvm/init-nvm.sh \
+    "$HOME/.nvm/nvm.sh"; do
+    if [[ -r "$candidate" ]]; then
+      printf '%s\n' "$candidate"
+      return 0
+    fi
+  done
+  return 1
+}
+
+load_nvm() {
+  local nvm_source
+  nvm_source="$(find_nvm_source)" || return 1
+  # shellcheck disable=SC1090
+  source "$nvm_source"
+  command -v nvm > /dev/null 2>&1
+}
+
+check_requirements() {
+  local missing=()
+
+  command -v git > /dev/null 2>&1 || missing+=("git")
+  command -v bash > /dev/null 2>&1 || missing+=("bash")
+  command -v vim > /dev/null 2>&1 || missing+=("vim")
+  command -v zsh > /dev/null 2>&1 || missing+=("zsh")
+  command -v kitty > /dev/null 2>&1 || missing+=("kitty")
+  command -v rg > /dev/null 2>&1 || missing+=("ripgrep/rg")
+  command -v fzf > /dev/null 2>&1 || missing+=("fzf")
+  command -v bat > /dev/null 2>&1 || command -v batcat > /dev/null 2>&1 || missing+=("bat/batcat")
+  command -v lsd > /dev/null 2>&1 || missing+=("lsd")
+  command -v zoxide > /dev/null 2>&1 || missing+=("zoxide")
+  command -v fc-cache > /dev/null 2>&1 || missing+=("fontconfig/fc-cache")
+  command -v ssh-agent > /dev/null 2>&1 || missing+=("openssh/ssh-agent")
+  command -v pgrep > /dev/null 2>&1 || missing+=("procps/pgrep")
+  command -v curl > /dev/null 2>&1 || missing+=("curl")
+  command -v corepack > /dev/null 2>&1 || missing+=("corepack")
+  has_zsh_autosuggestions || missing+=("zsh-autosuggestions")
+  find_nvm_source > /dev/null || missing+=("nvm")
+
+  if ((${#missing[@]})); then
+    warn "Missing required tools or integrations:"
+    printf '  - %s\n' "${missing[@]}" >&2
+    printf '\n' >&2
+    print_package_instructions "$(detect_os_family)" >&2
+    exit 1
+  fi
+}
+
+install_font() {
+  local source_font="$repo_root/assets/fonts/Literation_Mono_Nerd_Font_Complete.ttf"
+  local font_dir="$HOME/.local/share/fonts/dev-machine-setup"
+  local target_font="$font_dir/Literation_Mono_Nerd_Font_Complete.ttf"
+
+  [[ -f "$source_font" ]] || die "Missing font asset: $source_font"
+
+  mkdir -p "$font_dir"
+  cp "$source_font" "$target_font"
+  chmod 0644 "$target_font"
+  fc-cache -f
+
+  if command -v fc-scan > /dev/null 2>&1; then
+    if ! fc-scan --format '%{family}\n' "$target_font" | grep -q 'LiterationMono Nerd Font'; then
+      warn "Installed font, but fc-scan did not report LiterationMono Nerd Font."
+    fi
+  fi
+}
+
+backup_path() {
+  local target="$1"
+  local backup="${target}.backup.${timestamp}"
+
+  mv "$target" "$backup"
+  log "Backed up $target to $backup"
+}
+
+link_config() {
+  local source="$1"
+  local target="$2"
+  local target_parent
+  local source_real
+  local target_real=""
+
+  [[ -e "$source" ]] || die "Missing source config: $source"
+
+  target_parent="$(dirname -- "$target")"
+  mkdir -p "$target_parent"
+
+  source_real="$(readlink -f "$source")"
+  if [[ -e "$target" || -L "$target" ]]; then
+    target_real="$(readlink -f "$target" 2> /dev/null || true)"
+    if [[ -L "$target" && "$target_real" == "$source_real" ]]; then
+      log "Already linked: $target"
+      return 0
+    fi
+
+    if confirm "Replace existing $target? It will be backed up first."; then
+      backup_path "$target"
+    else
+      die "Refusing to overwrite existing $target"
+    fi
+  fi
+
+  ln -s "$source" "$target"
+  log "Linked $target -> $source"
+}
+
+deploy_configs() {
+  local manifest=(
+    "$repo_root/config/zsh/.zshrc|$HOME/.zshrc"
+    "$repo_root/config/zsh/.zshenv|$HOME/.zshenv"
+    "$repo_root/config/bash/.bashrc|$HOME/.bashrc"
+    "$repo_root/config/git/.gitconfig|$HOME/.gitconfig"
+    "$repo_root/config/editorconfig/.editorconfig|$HOME/.editorconfig"
+    "$repo_root/config/kitty/kitty.conf|$HOME/.config/kitty/kitty.conf"
+    "$repo_root/config/kitty/current-theme.conf|$HOME/.config/kitty/current-theme.conf"
+    "$repo_root/config/vim/.vimrc|$HOME/.vimrc"
+    "$repo_root/config/vim/.vim|$HOME/.vim"
+    "$repo_root/config/eslint/eslint.config.mts|$HOME/eslint.config.mts"
+    "$repo_root/config/typescript/tsconfig.json|$HOME/tsconfig.json"
+  )
+  local entry
+  local source
+  local target
+
+  for entry in "${manifest[@]}"; do
+    source="${entry%%|*}"
+    target="${entry#*|}"
+    link_config "$source" "$target"
+  done
+
+  mkdir -p "$HOME/.config/kitty"
+  if [[ ! -e "$HOME/.config/kitty/local.conf" ]]; then
+    : > "$HOME/.config/kitty/local.conf"
+    log "Created empty Kitty local override: $HOME/.config/kitty/local.conf"
+  fi
+}
+
+write_git_identity() {
+  local local_config="$HOME/.gitconfig.local"
+  local name
+  local email
+
+  if ! is_interactive; then
+    warn "Skipping Git identity prompt in non-interactive mode. Create $local_config manually."
+    return 0
+  fi
+
+  if [[ -e "$local_config" ]] && ! confirm "$local_config already exists. Replace it?"; then
+    log "Keeping existing $local_config"
+    return 0
+  fi
+
+  printf 'Git user.name: '
+  read -r name
+  printf 'Git user.email: '
+  read -r email
+
+  if [[ -z "$name" || -z "$email" ]]; then
+    warn "Skipping Git identity because name or email was empty."
+    return 0
+  fi
+
+  cat > "$local_config" <<EOF
+[user]
+	name = $name
+	email = $email
+EOF
+  chmod 0600 "$local_config"
+  log "Wrote $local_config"
+}
+
+set_npm_field() {
+  local file="$1"
+  local key="$2"
+  local value="$3"
+  local tmp
+
+  [[ -n "$value" ]] || return 0
+
+  tmp="$(mktemp)"
+  if [[ -e "$file" ]]; then
+    grep -v -E "^${key}=" "$file" > "$tmp" || true
+  fi
+  printf '%s=%s\n' "$key" "$value" >> "$tmp"
+  mv "$tmp" "$file"
+}
+
+write_npm_identity() {
+  local npmrc="$HOME/.npmrc"
+  local name
+  local email
+  local url
+
+  if ! is_interactive; then
+    warn "Skipping npm author prompt in non-interactive mode. Configure ~/.npmrc manually if needed."
+    return 0
+  fi
+
+  if ! confirm "Configure npm author defaults in $npmrc?"; then
+    log "Skipping npm author defaults."
+    return 0
+  fi
+
+  if [[ -e "$npmrc" ]]; then
+    if confirm "$npmrc already exists. Back it up before updating author fields?"; then
+      cp "$npmrc" "${npmrc}.backup.${timestamp}"
+      log "Backed up $npmrc to ${npmrc}.backup.${timestamp}"
+    else
+      die "Refusing to modify existing $npmrc without a backup."
+    fi
+  fi
+
+  printf 'npm init-author-name: '
+  read -r name
+  printf 'npm init-author-email: '
+  read -r email
+  printf 'npm init-author-url (optional): '
+  read -r url
+
+  touch "$npmrc"
+  set_npm_field "$npmrc" "init-author-name" "$name"
+  set_npm_field "$npmrc" "init-author-email" "$email"
+  set_npm_field "$npmrc" "init-author-url" "$url"
+  chmod 0600 "$npmrc"
+  log "Updated $npmrc"
+}
+
+setup_node() {
+  local installed_node=""
+  local package
+  local missing_packages=()
+  local global_packages=(
+    commitizen
+    typescript
+    graphql-language-service-cli
+    vercel
+  )
+
+  load_nvm || die "nvm is not available after loading known nvm init files."
+
+  if command -v node > /dev/null 2>&1; then
+    installed_node="$(node --version)"
+    log "Using active Node $installed_node"
+  elif nvm version default > /dev/null 2>&1 && [[ "$(nvm version default)" != "N/A" ]]; then
+    nvm use default
+    installed_node="$(node --version)"
+    log "Using default nvm Node $installed_node"
+  else
+    log "No active/default nvm Node version found; installing latest Node."
+    nvm install node
+    nvm alias default node
+  fi
+
+  if command -v corepack > /dev/null 2>&1; then
+    corepack enable
+  fi
+
+  for package in "${global_packages[@]}"; do
+    if ! npm list -g --depth=0 "$package" > /dev/null 2>&1; then
+      missing_packages+=("$package")
+    fi
+  done
+
+  if ((${#missing_packages[@]})); then
+    log "Installing missing global npm packages: ${missing_packages[*]}"
+    npm install -g "${missing_packages[@]}"
+  else
+    log "All required global npm packages are already installed."
+  fi
+}
+
+change_default_shell() {
+  local zsh_path
+  zsh_path="$(command -v zsh)"
+
+  if [[ "${SHELL:-}" == "$zsh_path" ]]; then
+    log "Default shell already appears to be $zsh_path"
+    return 0
+  fi
+
+  if ! is_interactive; then
+    warn "Skipping chsh in non-interactive mode. Run: chsh -s \"$zsh_path\""
+    return 0
+  fi
+
+  log "Changing default shell to $zsh_path. This may prompt for your password."
+  chsh -s "$zsh_path"
+}
+
+main() {
+  local os_family
+  os_family="$(detect_os_family)"
+
+  log "Detected OS family: $os_family"
+  print_package_instructions "$os_family"
+  check_requirements
+
+  git -C "$repo_root" submodule update --init --recursive
+  install_font
+  deploy_configs
+  write_git_identity
+  write_npm_identity
+  setup_node
+  change_default_shell
+
+  log "Setup complete."
+  log "Restart your terminal session or log out and back in if the default shell changed."
+}
+
+main "$@"
