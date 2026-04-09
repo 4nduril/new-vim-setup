@@ -152,7 +152,7 @@ unset nvm_source
 
 # Directory jumping
 if command -v zoxide > /dev/null 2>&1; then
-  eval "$(zoxide init zsh)"
+  eval "$(zoxide init zsh --cmd j)"
 fi
 
 if [[ -f ~/.zshrc.local ]]; then
