@@ -41,7 +41,7 @@ function! s:enable_copilot() abort
 
   " This intentionally uses <C-i> because it works in the current terminal.
   " Other terminals may treat it as <Tab>, in which case this should be remapped.
-  imap <silent><script><expr> <C-i> copilot#Accept("\<CR>")
+  imap <silent><script><expr> <M-i> copilot#Accept("\<CR>")
 endfunction
 
 command! CopilotEnable call <SID>enable_copilot()

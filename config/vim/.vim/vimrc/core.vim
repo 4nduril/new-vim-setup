@@ -23,6 +23,9 @@ set gdefault
 set showmatch
 set wrap
 set mouse=a
+if !has('nvim')
+  set ttymouse=sgr
+endif
 set splitbelow
 set splitright
 
